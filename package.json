@@ -1,0 +1,14 @@
+{
+  "name": "clicode",
+  "version": "1.0.0",
+  "description": "multiple commande line interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "clicode": "bin/index.js"
+  },
+  "author": "WAROL52",
+  "license": "ISC"
+}
