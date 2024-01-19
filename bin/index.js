@@ -1,16 +1,69 @@
 #! /usr/bin/env node
-const args = process.argv.slice(2);
-if (args.length < 2) {
-  console.error('Please enter at least 2 numbers');
-  process.exit(1); //an error occurred
+// Run `npm start` to start the demo
+import {
+  intro,
+  outro,
+  confirm,
+  select,
+  spinner,
+  isCancel,
+  cancel,
+  text,
+} from '@clack/prompts';
+import { setTimeout as sleep } from 'node:timers/promises';
+import color from 'picocolors';
+import { bdcodeHelp } from './help/help.js';
+
+
+
+async function main() {
+  console.log();
+  intro(color.inverse(' DBCode '));
+
+  return bdcodeHelp()
+  const name = await text({
+    message: 'What is your name?',
+    placeholder: 'Anonymous',
+  });
+
+  if (isCancel(name)) {
+    cancel('Operation cancelled');
+    return process.exit(0);
+  }
+
+  const shouldContinue = await confirm({
+    message: 'Do you want to continue?',
+  });
+
+  if (isCancel(shouldContinue)) {
+    cancel('Operation cancelled');
+    return process.exit(0);
+  }
+
+  const projectType = await select({
+    message: 'Pick a project type.',
+    options: [
+      { value: 'ts', label: 'TypeScript' },
+      { value: 'js', label: 'JavaScript' },
+      { value: 'coffee', label: 'CoffeeScript', hint: 'oh no' },
+    ],
+  });
+
+  if (isCancel(projectType)) {
+    cancel('Operation cancelled');
+    return process.exit(0);
+  }
+
+  const s = spinner();
+  s.start('Installing via npm');
+
+  await sleep(3000);
+
+  s.stop('Installed via npm');
+
+  outro("You're all set!");
+
+  await sleep(1000);
 }
 
-const total = args.reduce((previous, current) => parseFloat(current) * parseFloat(previous));
-
-if (isNaN(total)) {
-  console.error('One or more arguments are not numbers');
-  process.exit(1); //an error occurred
-}
-
-console.log(total);
-process.exit(0); //no errors occurred
+main().catch(console.error);
